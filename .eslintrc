@@ -18,7 +18,7 @@
     "no-unused-expressions": 0,
     "object-curly-spacing": [2, "always"],
     "space-in-parens": [2, "never"],
-    "strict": [2, "function"]"
+    "strict": [2, "function"]
   },
   "ecmaFeatures": {
     "modules": true,
@@ -26,6 +26,7 @@
   },
   "globals": {
     "expect": true,
+    "AWS": true
   },
   "env": {
     "worker": true,

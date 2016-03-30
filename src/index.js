@@ -4,12 +4,12 @@ import {
   bucket,
   region,
   secretAccessKey
-} from '../constants';
+} from './constants';
 
-const s3 = new window.AWS.S3();
+const s3 = new AWS.S3();
 
 const configAWS = () => {
-  window.AWS.config.update({
+  AWS.config.update({
     accessKeyId,
     secretAccessKey,
     region
@@ -33,11 +33,11 @@ const upload = (url, name) => {
 };
 
 const getURL = () => {
-  return window.location.pathname;
+  return location.pathname;
 };
 
 const getName = () => {
-  return window.prompt('Enter a name for this gif:');
+  return prompt('Enter a name for this gif:');
 };
 
 (() => {
