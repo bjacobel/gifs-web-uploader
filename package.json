@@ -1,0 +1,27 @@
+{
+  "name": "gifs-uploader",
+  "version": "0.0.1",
+  "description": "upload gifs to gifs.bjacobel.com with a bookmarklet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bjacobel/gifs-uploader.git"
+  },
+  "author": "Brian Jacobel <brian@bjacobel.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bjacobel/gifs-uploader/issues"
+  },
+  "homepage": "https://github.com/bjacobel/gifs-uploader#readme",
+  "dependencies": {
+    "aws-sdk": "^2.2.48"
+  },
+  "devDependencies": {
+    "eslint": "^2.5.3",
+    "eslint-config-airbnb": "^6.2.0"
+  }
+}
