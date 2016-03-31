@@ -20,9 +20,6 @@ const wpconfig = {
         include: path.join(__dirname, 'src'),
         loader: 'babel'
       }
-    ],
-    noParse: [
-      /aws\-sdk/
     ]
   },
   resolve: {

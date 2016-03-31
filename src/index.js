@@ -1,51 +1,81 @@
-import 'aws-sdk/dist/aws-sdk';
+import 'blueimp-canvas-to-blob';
+import hmacsha1 from 'hmacsha1'
+import {
+  bucket,
+  destURL
+} from './constants';
 import {
   accessKeyId,
-  bucket,
-  region,
   secretAccessKey
-} from './constants';
+} from './credentials';
 
-const s3 = new AWS.S3();
+const upload = (gif, name) => {
+  const date = new Date();
 
-const configAWS = () => {
-  AWS.config.update({
-    accessKeyId,
+  const stringToSign =
+    'PUT\n' +
+    '\n' +
+    'image/gif\n' +
+    `${date}\n` +
+    'x-amz-acl:public-read\n' +
+    `/${bucket}/${name}`;
+
+  const signature = btoa(hmacsha1(
     secretAccessKey,
-    region
-  });
+    unescape(encodeURIComponent(stringToSign))
+  ));
+
+  const headers = new Headers();
+  headers.append('Authorization', `AWS ${accessKeyId}:${signature}`);
+  headers.append('Content-Length', gif.size);
+  headers.append('Content-Type', 'image/gif');
+  headers.append('Date', date);
+  headers.append('Expect', '100-continue');
+  headers.append('Host', `${bucket}.s3.amazonaws.com`);
+  headers.append('x-amz-acl', 'public-read');
+
+  return fetch(
+    `https://s3.amazonaws.com/${bucket}/${name}`,
+    {
+      method: 'PUT',
+      body: gif,
+      headers
+    }
+  );
 };
 
-const upload = (url, name) => {
-  return new Promise((resolve, reject) => {
-    fetch(url).then((response) => {
-      const params = { Bucket: bucket, Key: name, Body: response.body };
+// Get the first img in the document and return it as a blob
+const getGif = () => {
+  const gif = document.querySelector('img');
+  const canvas = document.createElement('canvas');
 
-      s3.upload(params, (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
+  canvas.width = gif.width;
+  canvas.height = gif.height;
+
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(gif, 0, 0);
+
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      resolve(blob);
     });
   });
 };
 
-const getURL = () => {
-  return location.pathname;
-};
-
+// Get the name the gif will be called on S3
 const getName = () => {
-  return prompt('Enter a name for this gif:');
+  return 'oops';
+  // return prompt('Enter a filename (no ".gif"):');
 };
 
-(() => {
-  configAWS();
+window.onload = () => {
+  const filename = `${getName()}.gif`;
 
-  upload(getURL(), getName()).then(() => {
-    console.log('Success!');
-  }).catch((err) => {
-    console.warn('Error!: ', err);
+  getGif().then((gif) => {
+    upload(gif, filename).then(() => {
+      // location.href = `${destURL}${filename}`;
+    }).catch((err) => {
+      console.warn(`Error!: ${err}`);
+    });
   });
-})();
+};

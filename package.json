@@ -4,7 +4,8 @@
   "description": "upload files to S3 with a bookmarklet",
   "main": "index.js",
   "scripts": {
-    "start": "webpack -p",
+    "start": "webpack-dev-server --output-public-path /",
+    "build": "webpack -p && echo \"javascript:$(cat dist/main.js)\" | pbcopy",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ."
   },
@@ -19,7 +20,8 @@
   },
   "homepage": "https://github.com/bjacobel/gifs-uploader#readme",
   "dependencies": {
-    "aws-sdk": "^2.2.48"
+    "aws-signature-v4": "^1.0.1",
+    "blueimp-canvas-to-blob": "^3.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
@@ -29,6 +31,7 @@
     "babel-runtime": "^6.6.1",
     "eslint": "^2.5.3",
     "eslint-config-airbnb": "^6.2.0",
-    "webpack": "^1.12.14"
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
   }
 }
