@@ -1,7 +1,8 @@
 import 'blueimp-canvas-to-blob';
-import hmacsha1 from 'hmacsha1'
+import 'aws-sdk/dist/aws-sdk';
 import {
   bucket,
+  region,
   destURL
 } from './constants';
 import {
@@ -9,39 +10,33 @@ import {
   secretAccessKey
 } from './credentials';
 
-const upload = (gif, name) => {
-  const date = new Date();
-
-  const stringToSign =
-    'PUT\n' +
-    '\n' +
-    'image/gif\n' +
-    `${date}\n` +
-    'x-amz-acl:public-read\n' +
-    `/${bucket}/${name}`;
-
-  const signature = btoa(hmacsha1(
+const configAWS = () => {
+  AWS.config.update({
+    accessKeyId,
     secretAccessKey,
-    unescape(encodeURIComponent(stringToSign))
-  ));
+    region
+  });
+};
 
-  const headers = new Headers();
-  headers.append('Authorization', `AWS ${accessKeyId}:${signature}`);
-  headers.append('Content-Length', gif.size);
-  headers.append('Content-Type', 'image/gif');
-  headers.append('Date', date);
-  headers.append('Expect', '100-continue');
-  headers.append('Host', `${bucket}.s3.amazonaws.com`);
-  headers.append('x-amz-acl', 'public-read');
+const upload = (gif, name) => {
+  const s3 = new AWS.S3();
 
-  return fetch(
-    `https://s3.amazonaws.com/${bucket}/${name}`,
-    {
-      method: 'PUT',
-      body: gif,
-      headers
-    }
-  );
+  return new Promise((resolve, reject) => {
+    const params = {
+      Bucket: bucket,
+      Key: name,
+      Body: gif,
+      ContentType: 'image/gif'
+    };
+
+    s3.upload(params, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
 };
 
 // Get the first img in the document and return it as a blob
@@ -64,18 +59,19 @@ const getGif = () => {
 
 // Get the name the gif will be called on S3
 const getName = () => {
-  return 'oops';
-  // return prompt('Enter a filename (no ".gif"):');
+  return prompt('Enter a filename (no ".gif"):');
 };
 
-window.onload = () => {
+(() => {
+  configAWS();
+
   const filename = `${getName()}.gif`;
 
   getGif().then((gif) => {
     upload(gif, filename).then(() => {
-      // location.href = `${destURL}${filename}`;
+      location.href = `${destURL}${filename}`;
     }).catch((err) => {
       console.warn(`Error!: ${err}`);
     });
   });
-};
+})();

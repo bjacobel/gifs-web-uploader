@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/bjacobel/gifs-uploader#readme",
   "dependencies": {
+    "aws-sdk": "^2.2.48",
     "aws-signature-v4": "^1.0.1",
     "blueimp-canvas-to-blob": "^3.3.0"
   },
