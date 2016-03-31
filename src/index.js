@@ -1,10 +1,11 @@
-import 'blueimp-canvas-to-blob';
-import 'aws-sdk/dist/aws-sdk';
+// import '../vendor/aws-sdk.js';  // Contains only the S3 library
+
 import {
   bucket,
   region,
   destURL
 } from './constants';
+
 import {
   accessKeyId,
   secretAccessKey
@@ -42,17 +43,12 @@ const upload = (gif, name) => {
 // Get the first img in the document and return it as a blob
 const getGif = () => {
   const gif = document.querySelector('img');
-  const canvas = document.createElement('canvas');
-
-  canvas.width = gif.width;
-  canvas.height = gif.height;
-
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(gif, 0, 0);
 
   return new Promise((resolve) => {
-    canvas.toBlob((blob) => {
-      resolve(blob);
+    fetch(gif.src).then((response) => {
+      response.blob().then((blob) => {
+        resolve(blob);
+      });
     });
   });
 };
@@ -65,13 +61,17 @@ const getName = () => {
 (() => {
   configAWS();
 
-  const filename = `${getName()}.gif`;
+  let filename = getName();
 
-  getGif().then((gif) => {
-    upload(gif, filename).then(() => {
-      location.href = `${destURL}${filename}`;
-    }).catch((err) => {
-      console.warn(`Error!: ${err}`);
+  if (filename !== null) {
+    filename += '.gif';
+
+    getGif().then((blob) => {
+      upload(blob, filename).then(() => {
+        location.href = `${destURL}${filename}`;
+      }).catch((err) => {
+        console.warn(`Error!: ${err}`);
+      });
     });
-  });
+  }
 })();

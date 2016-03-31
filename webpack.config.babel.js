@@ -1,4 +1,3 @@
-
 const path = require('path');
 const webpack = require('webpack');
 
@@ -16,14 +15,12 @@ const wpconfig = {
   module: {
     loaders: [
       {
-        test: /\.js?$/,
+        test: /\.js$/,
         include: path.join(__dirname, 'src'),
         loader: 'babel'
       }
     ],
-    noParse: [
-      /aws\-sdk/
-    ]
+    noParse: [/aws\-sdk/]
   },
   resolve: {
     extensions: ['', '.js']
