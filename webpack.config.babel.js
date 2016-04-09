@@ -19,14 +19,26 @@ const wpconfig = {
         include: path.join(__dirname, 'src'),
         loader: 'babel'
       }
-    ],
-    noParse: [/aws\-sdk/]
+    ]
   },
   resolve: {
     extensions: ['', '.js']
   },
   plugins: [
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: true,
+      compress: {
+        sequences: true,
+        dead_code: true,
+        conditionals: true,
+        booleans: true,
+        unused: true,
+        if_return: true,
+        join_vars: true,
+        drop_console: true
+      }
+    })
   ]
 };
 

@@ -1,4 +1,4 @@
-// import '../vendor/aws-sdk.js';  // Contains only the S3 library
+import '../vendor/aws-sdk.js';  // Contains only the S3 library
 
 import {
   bucket,
