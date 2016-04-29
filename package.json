@@ -1,5 +1,5 @@
 {
-  "name": "gifs-uploader",
+  "name": "gifs-web-uploader",
   "version": "0.0.1",
   "description": "upload files to S3 with a bookmarklet",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bjacobel/gifs-uploader.git"
+    "url": "git+https://github.com/bjacobel/gifs-web-uploader.git"
   },
   "author": "Brian Jacobel <brian@bjacobel.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bjacobel/gifs-uploader/issues"
+    "url": "https://github.com/bjacobel/gifs-web-uploader/issues"
   },
-  "homepage": "https://github.com/bjacobel/gifs-uploader#readme",
+  "homepage": "https://github.com/bjacobel/gifs-web-uploader#readme",
   "devDependencies": {
     "babel-core": "^6.7.4",
     "babel-loader": "^6.2.4",
