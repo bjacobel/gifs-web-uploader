@@ -43,10 +43,15 @@ const upload = (gif, name) => {
 // Get the first img in the document and return it as a blob
 const getGif = () => {
   const gif = document.querySelector('img');
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
   return new Promise((resolve) => {
-    fetch(gif.src).then((response) => {
-      response.blob().then((blob) => {
+    window.createImageBitmap(gif).then((imageBitmap) => {
+      canvas.height = imageBitmap.height;
+      canvas.width = imageBitmap.width;
+      ctx.drawImage(imageBitmap, 0, 0);
+      canvas.toBlob((blob) => {
         resolve(blob);
       });
     });
