@@ -3,8 +3,11 @@ const webpack = require('webpack');
 
 const wpconfig = {
   entry: {
-    main: [
-      './src/index.js'
+    bookmarklet: [
+      './src/bookmarklet.js'
+    ],
+    uploader: [
+      './src/uploader.js'
     ]
   },
   output: {

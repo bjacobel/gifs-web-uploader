@@ -58,7 +58,7 @@ const getName = () => {
   return prompt('Enter a filename (no ".gif"):');
 };
 
-(() => {
+const uploadGif = () => {
   configAWS();
 
   let filename = getName();
@@ -74,4 +74,6 @@ const getName = () => {
       });
     });
   }
-})();
+};
+
+window.uploadGif = uploadGif;
